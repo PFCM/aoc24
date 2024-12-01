@@ -1,0 +1,29 @@
+name: Go
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Go
+      uses: actions/setup-go@93397bea11091df50f3d7e59dc26a7711a8bcfbe
+      with:
+        go-version: '1.23.3'
+    - name: Build
+      run: go build -v ./...
+    - name: Test
+      run: go test -v ./...
+    - name: Test -race
+      run: go test -race -v ./...
+    - name: Run examples
+      run: |
+        for d in days/*; do
+          if [ -f "$d/example.txt" ]; then
+            go run $d < "$d/example.txt"
+          fi
+        done
