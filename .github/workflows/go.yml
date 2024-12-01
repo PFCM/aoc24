@@ -24,6 +24,6 @@ jobs:
       run: |
         for d in days/*; do
           if [ -f "$d/example.txt" ]; then
-            go run $d < "$d/example.txt"
+            go run "./$d" < "$d/example.txt"
           fi
         done
