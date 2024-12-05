@@ -4,13 +4,14 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"iter"
 	"log"
 	"os"
 	"slices"
 	"sort"
 	"strconv"
 	"strings"
+
+	"github.com/pfcm/aoc24/it"
 )
 
 func main() {
@@ -44,7 +45,7 @@ func partTwo(left, right []int) {
 
 func partOne(left, right []int) {
 	total := 0
-	for l, r := range zip(slices.Values(left), slices.Values(right)) {
+	for l, r := range it.Zip(slices.Values(left), slices.Values(right)) {
 		d := l - r
 		if d < 0 {
 			d = -d
@@ -52,28 +53,6 @@ func partOne(left, right []int) {
 		total += d
 	}
 	fmt.Println(total)
-}
-
-func zip[A, B any](a iter.Seq[A], b iter.Seq[B]) iter.Seq2[A, B] {
-	return func(yield func(A, B) bool) {
-		nextA, stopA := iter.Pull(a)
-		defer stopA()
-		nextB, stopB := iter.Pull(b)
-		defer stopB()
-		for {
-			aVal, aOK := nextA()
-			if !aOK {
-				return
-			}
-			bVal, bOK := nextB()
-			if !bOK {
-				return
-			}
-			if !yield(aVal, bVal) {
-				return
-			}
-		}
-	}
 }
 
 func read() (left, right []int, err error) {
